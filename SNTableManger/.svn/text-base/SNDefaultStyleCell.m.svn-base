@@ -1,0 +1,81 @@
+//
+//  SNDefaultStyleCell.m
+//  StrawberryWeekend
+//
+//  Created by 蒋宇 on 16/1/14.
+//  Copyright © 2016年 Yikuaiqu. All rights reserved.
+//
+
+#import "SNDefaultStyleCell.h"
+#import "SNDefaultStyleCellObject.h"
+#import <Masonry.h>
+
+@interface SNDefaultStyleCell ()
+@property (nonatomic, strong) UIImageView *contentImageView;
+@property (nonatomic, strong) UILabel *label;
+@property (nonatomic, strong, readwrite) SNDefaultStyleCellObject *cellObject;
+@end
+
+@implementation SNDefaultStyleCell
+@dynamic cellObject;
+
+- (void)prepareForReuse {
+    [super prepareForReuse];
+    self.label.text = nil;
+    self.label.attributedText = nil;
+}
+
+#pragma mark - getter & setter
+- (UILabel *)label {
+    if (!_label) {
+        _label = [[UILabel alloc] init];
+        _label.backgroundColor = [UIColor clearColor];
+        _label.font = FONT_REGULAR(kSNFontSizeAdper(12));
+        _label.textColor = [SWColor color333333];
+        _label.textAlignment = NSTextAlignmentLeft;
+        [self.contentView addSubview:_label];
+    }
+    return _label;
+}
+
+- (CGFloat)cellHeight {
+    return 44.f;
+}
+
+- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
+    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
+    if (self) {
+        self.contentView.backgroundColor = [UIColor whiteColor];
+        [self configUI];
+    }
+    return self;
+}
+
+- (void)configUI {
+    [self.label mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(@8);
+        make.right.equalTo(self.contentView).with.offset(-8);
+        make.top.equalTo(@12);
+        make.centerY.equalTo(self.contentView);
+    }];
+}
+
+
+- (void)configWithCellObject:(SNDefaultStyleCellObject *)cellObject {
+    self.textLabel.attributedText = nil;
+    self.textLabel.text = nil;
+    
+    if (cellObject.backgroundColor) {
+        self.contentView.backgroundColor = cellObject.backgroundColor;
+    }
+    
+    self.label.textAlignment = self.cellObject.textAlignment;
+    
+    if (self.cellObject.attributedTitle) {
+        self.label.attributedText = nil;
+        self.label.text = nil;
+        self.label.attributedText = self.cellObject.attributedTitle;
+    }
+}
+
+@end

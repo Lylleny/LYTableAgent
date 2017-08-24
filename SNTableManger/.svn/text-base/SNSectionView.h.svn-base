@@ -1,0 +1,13 @@
+//
+//  SNSectionView.h
+//  SNTableManager
+//
+//  Created by 蒋宇 on 15/8/9.
+//  Copyright (c) 2015年 Snake_Jay. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+
+@interface SNSectionView : UIView
+
+@end

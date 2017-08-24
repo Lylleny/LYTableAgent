@@ -1,0 +1,69 @@
+//
+//  SNGroupTableManager.m
+//  StrawberryWeekend
+//
+//  Created by 蒋宇 on 16/6/15.
+//  Copyright © 2016年 Yikuaiqu. All rights reserved.
+//
+
+#import "SNGroupTableManager.h"
+
+@implementation SNGroupTableManager
+@dynamic delegate;
+
+- (id)initWithTableView:(UITableView *)tableView {
+    self = [super initWithTableView:tableView];
+    if (self) {
+        self.heightForSectionHeader = 10;
+        self.heightForSectionFooter = 0.00001;
+    }
+    return self;
+}
+
+- (BOOL)tableViewStyleisGrouped {
+    return self.tableView.style == UITableViewStyleGrouped;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    SNSection *section_ = [self sectionAtIndex:section];
+    if ([self.delegate respondsToSelector:@selector(tableManager:heightForHeaderInSection:)]) {
+        return [self.delegate tableManager:self heightForHeaderInSection:section_];
+    }
+    
+    CGFloat height = 0.00001;
+    if ([self tableViewStyleisGrouped]) {
+        height = self.heightForSectionHeader;
+        
+        SNSection *section_ = [self sectionAtIndex:section];
+        if (section_.rows.count == 0) {
+            height = 0.00001;
+        }
+        
+        if (section_.sectionView) {
+            height = CGRectGetHeight(section_.sectionView.frame);
+        }
+    }
+    
+    return height;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
+    SNSection *section_ = [self sectionAtIndex:section];
+    if ([self.delegate respondsToSelector:@selector(tableManager:heightForFooterInSection:)]) {
+        return [self.delegate tableManager:self heightForFooterInSection:section_];
+    }
+    
+    CGFloat height = 0.00001;
+    if ([self tableViewStyleisGrouped]) {
+        height = self.heightForSectionFooter;
+        
+        SNSection *section_ = [self sectionAtIndex:section];
+        if (section_.footView) {
+            height = CGRectGetHeight(section_.footView.frame);
+        }
+    }
+    
+    return height;
+}
+
+@end

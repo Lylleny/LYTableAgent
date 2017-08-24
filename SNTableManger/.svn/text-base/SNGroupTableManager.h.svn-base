@@ -1,0 +1,23 @@
+//
+//  SNGroupTableManager.h
+//  StrawberryWeekend
+//
+//  Created by 蒋宇 on 16/6/15.
+//  Copyright © 2016年 Yikuaiqu. All rights reserved.
+//
+
+#import "SNTableManager.h"
+
+@protocol SNGroupTableManagerDelegate <NSObject, SNTableManagerDelegate>
+
+- (CGFloat)tableManager:(SNTableManager *)tableManager heightForHeaderInSection:(SNSection *)section;
+- (CGFloat)tableManager:(SNTableManager *)tableManager heightForFooterInSection:(SNSection *)section;
+
+@end
+
+@interface SNGroupTableManager : SNTableManager
+@property (nonatomic, assign) CGFloat heightForSectionHeader;
+@property (nonatomic, assign) CGFloat heightForSectionFooter;
+
+@property (nonatomic, weak) id<SNGroupTableManagerDelegate> delegate;
+@end

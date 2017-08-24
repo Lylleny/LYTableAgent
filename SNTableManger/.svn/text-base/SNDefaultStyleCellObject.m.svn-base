@@ -1,0 +1,13 @@
+//
+//  SNDefaultStyleCellObject.m
+//  StrawberryWeekend
+//
+//  Created by 蒋宇 on 16/1/14.
+//  Copyright © 2016年 Yikuaiqu. All rights reserved.
+//
+
+#import "SNDefaultStyleCellObject.h"
+
+@implementation SNDefaultStyleCellObject
+
+@end

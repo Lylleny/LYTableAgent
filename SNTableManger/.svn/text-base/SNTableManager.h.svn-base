@@ -1,0 +1,71 @@
+//
+//  SNTableManager.h
+//  SNTableManager
+//
+//  Created by 蒋宇 on 15/8/9.
+//  Copyright (c) 2015年 Snake_Jay. All rights reserved.
+//
+
+#import <Foundation/Foundation.h>
+@import UIKit;
+#import "SNSection.h"
+
+@interface SNIndexPathHeightCache : NSObject
+@property (nonatomic, strong) NSMutableArray *heightsBySection;
+
+- (BOOL)existsHeightAtIndexPath:(NSIndexPath *)indexPath;
+- (void)cacheHeight:(CGFloat)height byIndexPath:(NSIndexPath *)indexPath;
+- (CGFloat)heightForIndexPath:(NSIndexPath *)indexPath;
+- (void)invalidateHeightAtIndexPath:(NSIndexPath *)indexPath;
+- (void)invalidateAllHeightCache;
+@end
+
+typedef void(^didSelectRow)(NSIndexPath *indexPath);
+typedef void(^didScroll)(UIScrollView *scroll);
+typedef void(^beginDecelerating)(UIScrollView *scroll);
+typedef void(^didEndDecelerating)(UIScrollView *scroll);
+typedef void(^beginDragging)(UIScrollView *scroll);
+typedef void(^didEndDragging)(UIScrollView *scroll,BOOL decelerate);
+
+@class SNTableManager;
+
+@protocol SNTableManagerDelegate <NSObject>
+
+- (void)tableManager:(SNTableManager *)tableManager willDisplayCellObject:(SNCellObject *)cellObject forRowAtIndexPath:(NSIndexPath *)indexPath;
+- (void)tableManager:(SNTableManager *)tableManager commitEditStyle:(UITableViewCellEditingStyle)editingStyle  WithCellObject:(SNCellObject *)cellObject ForRowAtIndexPath:(NSIndexPath *)indexPath;
+@end
+
+@interface SNTableManager : NSObject <UITableViewDataSource, UITableViewDelegate>
+@property (nonatomic, strong) NSArray *sections;
+@property (nonatomic, weak) UITableView *tableView;
+@property (nonatomic, copy) didSelectRow didSelectRow;
+@property (nonatomic, copy) didScroll didScroll;
+@property (nonatomic, copy) beginDragging beginDragging;
+@property (nonatomic, copy) beginDecelerating beginDecelerating;
+@property (nonatomic, copy) didEndDecelerating didEndDecelerating;
+@property (nonatomic, copy) didEndDragging didEndDragging;
+
+@property (nonatomic) BOOL deselectCellWithAnimating;
+
+@property (nonatomic, weak) id<SNTableManagerDelegate> delegate;
+
+- (instancetype)initWithTableView:(UITableView *)tableView;
+
+- (void)addSection:(SNSection *)section;
+- (void)addSectionsFromArray:(NSArray *)section;
+- (void)removeAllSections;
+
+- (void)insertCellObjects:(NSArray<SNCellObject *> *)cellObjects
+             atIndexPaths:(NSArray<NSIndexPath *> *)indexPaths
+         withRowAnimation:(UITableViewRowAnimation)rowAnimation;
+
+- (void)deleteAtIndexPaths:(NSArray<NSIndexPath *> *)indexPaths
+         withRowAnimation:(UITableViewRowAnimation)rowAnimation;
+
+- (void)reload;
+- (void)reloadSection:(SNSection *)section;
+- (void)reloadCellObject:(SNCellObject *)cellObject;
+
+- (SNSection *)sectionAtIndex:(NSInteger)index;
+- (NSUInteger)indexOfSection:(SNSection *)section;
+@end
